@@ -3,19 +3,20 @@
 @section('content')
     <div class="container">
         <h1>Products</h1>
-        <div class="row row-cols-1 row-cols-md-2 g-4">
+        <div class="row">
             @foreach ($products as $product)
 
 
-
+  
                 <div class="col-4">
                     <div class="card mb-4">
-                        <img src="{{ $product->image }}" class="card-img-top" alt="...">
+                        <a href="/products/{{$product->id}}"><img src="{{ $product->image }}" class="card-img-top" alt="..."></a>
                         <div class="card-body w-100">
                             <h5 class="card-title">{{ $product->name }}</h5>
-                            <a href=""><button class="btn btn-primary ml-1 mr-5 addToCart" name="addToCart"> Add to
-                                    Cart</button>
-                                <button class="btn btn-primary ml-5 buyNow" name="buyNow">Buy Now</button></a>
+                            <button class="btn btn-info ml-2 mr-2 p-2 addToCart" name="addToCart"><i class="fas fa-shopping-cart"></i><a href="/cart/{{$product->id}}" style=" color: #ffffff;
+                                text-decoration: none;"> Add to
+                                    Cart</a></button>
+                                <button class="btn btn-info ml-5 p-2 buyNow" name="buyNow"><i class="fas fa-bolt ml-1 mr-1"></i>Buy Now</button>
                         </div>
                     </div>
                 </div>

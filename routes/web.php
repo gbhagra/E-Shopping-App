@@ -11,11 +11,21 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+use App\Http\Controllers\CartController;
+
+Route::get('/','ProductController@index' );
 
 Auth::routes();
 
 Route::get('/products', 'ProductController@index')->name('home');
-Route::get('/home/{id}', 'ProductController@show');
+Route::get('/products/{id}', 'ProductController@show');
+Route::get('/cart', 'CartController@index');
+Route::get('/cart/{id}', 'CartController@store');
+Route::get('/cart/delete/{id}','CartController@destroy');
+Route::post('/cart/update/{id}','CartController@update');
+Route::get('/shipping','ShippingController@create');
+Route::post('/shipping','ShippingController@store');
+Route::get('/order/confirmation','OrderController@checkout');
+
+// Route::delete('users/{id}', CartController);
+

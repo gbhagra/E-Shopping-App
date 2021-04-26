@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\product;
+use App\Shipping;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 
-class ProductController extends Controller
+class ShippingController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware(['auth']);
+    }
     public function index()
     {
         //
-        $products = product::paginate(9);
-        return view('home',compact('products'));
     }
 
     /**
@@ -28,6 +29,9 @@ class ProductController extends Controller
     public function create()
     {
         //
+        if((auth()->user()->shipping()->get()->isNotEmpty()))
+        return redirect()->home();// change it to order summary
+        return view('shipping');
     }
 
     /**
@@ -39,29 +43,36 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         //
+       
+        Shipping::create([
+            'user_id' => auth()->user()->id,
+            'name' => $request->name,
+            'address' => $request->address ." ".$request->pincode ." ". $request->state,
+            'phone' => $request->phone
+        ]);
+        
+        return redirect()->home();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\product  $product
+     * @param  \App\Shipping  $shipping
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Shipping $shipping)
     {
         //
-        $product =product::find($id);
-        
-        return view('detailed',compact('product'));
+        return view('shipping');
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\product  $product
+     * @param  \App\Shipping  $shipping
      * @return \Illuminate\Http\Response
      */
-    public function edit(product $product)
+    public function edit(Shipping $shipping)
     {
         //
     }
@@ -70,10 +81,10 @@ class ProductController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\product  $product
+     * @param  \App\Shipping  $shipping
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, product $product)
+    public function update(Request $request, Shipping $shipping)
     {
         //
     }
@@ -81,10 +92,10 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\product  $product
+     * @param  \App\Shipping  $shipping
      * @return \Illuminate\Http\Response
      */
-    public function destroy(product $product)
+    public function destroy(Shipping $shipping)
     {
         //
     }
