@@ -18,7 +18,7 @@ class ProductSeeder extends Seeder
                 'description' => $des,
                 'price' => $i*10,
                 'qty' =>  10,
-                'image' => 'https://picsum.photos/id/' . $i .'/200/200'
+                'image' => 'https://picsum.photos/id/' . $i .'/500/700'
             ]);
         }
     }

@@ -30,7 +30,7 @@
                         @endif
 
                     </div>
-                    <button type="submit" class="form-control btn-info mt-3">
+                    <button type="submit" class="form-control mt-3" style="background:#fb6419;color:white; height:50px">
                         Login
                     </button>
                 </form>

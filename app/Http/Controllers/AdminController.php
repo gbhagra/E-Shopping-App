@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Shipping;
+use App\product;
 use Illuminate\Http\Request;
 
-class ShippingController extends Controller
+class AdminController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function __construct()
-    {
-        $this->middleware(['auth']);
-    }
     public function index()
     {
         //
+        // dd(1);
+        return view('admin.layout');
     }
 
     /**
@@ -29,9 +27,6 @@ class ShippingController extends Controller
     public function create()
     {
         //
-        if((auth()->user()->shipping()->get()->isNotEmpty()))
-        return redirect('/order/confirmation');// change it to order summary
-        return view('shipping');
     }
 
     /**
@@ -43,60 +38,57 @@ class ShippingController extends Controller
     public function store(Request $request)
     {
         //
-       
-        Shipping::create([
-            'user_id' => auth()->user()->id,
-            'name' => $request->name,
-            'address' => $request->address ." ".$request->pincode ." ". $request->state,
-            'phone' => $request->phone
-        ]);
-        
-        return redirect('/order/confirmation');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Shipping  $shipping
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Shipping $shipping)
+    public function showProducts()
     {
-        //
-        return view('shipping');
+        $products = \App\Product::paginate(10);
+        return view('admin.products',compact('products'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Shipping  $shipping
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Shipping $shipping)
+    public function edit($id)
     {
         //
+        $product = product::find($id);
+        return view('admin.update' , compact('product'));    
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Shipping  $shipping
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Shipping $shipping)
+    public function update(Request $request, $id)
     {
         //
+
+
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Shipping  $shipping
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Shipping $shipping)
+    public function destroy($id)
     {
         //
+        product::destroy($id);
+        return redirect()->back();
     }
 }
