@@ -1,6 +1,3 @@
-
-@inject('cart', 'App\Http\Controllers\CartController')
-
 @extends('layouts.app')
 
 @section('content')
@@ -10,61 +7,53 @@
         <div class="row">
 
 
-            @if (empty($products))
+            @if (count($cartItems) == 0)
                 <div style="margin-top: 5%;margin-left:30%">
-                    {{-- <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" fill="currentColor" class="bi bi-cart ml-5 mb-3" viewBox="0 0 16 16">
-                        <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                      </svg> --}}
-                      <img src="https://freesvg.org/img/shopping-bag1.png"/>
-                      
-                      <h4>Hey, it feels so light</h4>
+
+                    <img src="https://freesvg.org/img/shopping-bag1.png" />
+
+                    <h4>Hey, it feels so light</h4>
                     <p>There is nothing in your cart let's add some items</p>
                     <a type="button" class="mycart" href="/products">ADD ITEMS</a>
                 </div>
             @else
+            {{-- {{dd($cartItems)}} --}}
                 <div class="col-md-8">
                     <div class="card mt-3">
                         <h3>My cart</h3>
-                        {{-- {{dd($total)}} --}}
 
+                        @foreach ($cartItems as $cartItem)
 
-
-                        @foreach ($products as $product)
-
-
-                            {{--  --}}
-                            {{-- <input type="text" onchange="this.form.submit()"> --}}
-
-
-                            <div class="" id="element{{ $product->id }}">
+                            <div class="" id="element{{ $cartItem->product_id }}">
                                 <hr>
 
                                 <div class="d-flex align-items-center justify-content-between">
 
                                     <div class="d-flex">
-                                        <img src="{{ $product->image }}" alt="prd-img" height="100" width="100">
+                                        <img src="{{ $cartItem->product->image }}" alt="prd-img" height="100" width="100">
                                         <div class="ml-5">
-                                            <p>{{ $product->name }}</p>
-                                            <strong>₹{{ $product->price }}</strong>
+                                            <p>{{ $cartItem->product->name }}</p>
+                                            <strong>₹{{ $cartItem->product->price }}</strong>
                                         </div>
                                     </div>
                                     <div>
                                         <form>
                                             {{ csrf_field() }}
-                                            <label for="qty" id="quantity-{{ $product->id }}">
-                                                {{ $cart->getQty($product->id) }}
+                                            <label for="qty" id="quantity-{{ $cartItem->product->id }}">
+                                                {{ $cartItem->quantity }}
                                             </label> <input type="number" class="qty" name="qty" min="1"
-                                                max="{{ $product->qty }}" id="{{ $product->id }}">
+                                                max="{{ $cartItem->product->qty }}" id="{{ $cartItem->product->id }}">
                                         </form>
                                     </div>
                                     <a type="button" class="btn btn-danger mr-3 Delete" style="height:2.5rem; color:white "
-                                        href="/cart/delete/{{ $product->id }}" id="{{ $product->id }}">Delete</a>
+                                        href="/cart/delete/{{ $cartItem->product->id }}"
+                                        id="{{ $cartItem->product->id }}">Delete</a>
 
 
 
                                 </div>
                             </div>
-                        @endforeach {{-- @endfor --}}
+                        @endforeach
                     </div>
                 </div>
 
@@ -103,8 +92,8 @@
                         type: 'GET',
                         success: function(response) {
                             console.log(response);
-                            $('#total').text(response.total);
-                            $('#price').text(response.price);
+                            $('#total').text('₹'+response.total);
+                            $('#price').text('₹'+response.price);
                         }
                     })
                 }

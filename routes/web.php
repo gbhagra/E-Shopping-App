@@ -12,6 +12,7 @@
 */
 
 
+
 Route::get('/', 'ProductController@index');
 
 Auth::routes();
@@ -27,6 +28,8 @@ Route::get('/shipping', 'ShippingController@create');
 Route::post('/shipping', 'ShippingController@store');
 Route::get('/order/confirmation', 'OrderController@checkout');
 Route::get('/order/summary', 'OrderController@store');
+Route::get('/admin/orders/status/{id}/{status}', 'OrderController@update');
+Route::get('/orders', 'OrderController@show');
 
 
 
@@ -37,7 +40,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/products', 'AdminController@showProducts');
     Route::get('/admin/product/update/{id}', 'ProductController@edit');
     Route::post('/admin/product/update/{id}', 'ProductController@update');
-    Route::post('/admin/products/{id}','AdminController@destroy');
+    Route::post('/admin/products/{id}', 'AdminController@destroy');
+    Route::get('/admin/users', 'AdminController@showUsers');
+    Route::get('/admin/users/{id}', 'UserController@show');
+    Route::get('/admin/orders', 'OrderController@index');
 });
 
 // Route::delete('users/{id}', CartController);

@@ -22,7 +22,7 @@
                     {{ Auth::user()->name }} 
                 </a>
                 @endif
-               
+               <a href="/orders"  role="button" aria-expanded="false" class="text-light mr-2" >My Details</a>
                 <a href="/cart " role="button" aria-expanded="false" class="text-light mr-2" >
                     Cart 
                 </a>

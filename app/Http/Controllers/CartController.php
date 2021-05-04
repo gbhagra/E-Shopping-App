@@ -23,30 +23,23 @@ class CartController extends Controller
     }
     public function index()
     {
-        //
-        //item -> prod_id
-        // prod_id -> product
-        //products push product
-        //compact products -> >>>>>>
+        // USER->CART
+        //CART->PRODID
+        //CART->PRODUCT = PRODUCT WHERE ID = CART->PRODUCTID
 
-        // $carts = Auth::user()->Cart()->get();
-
-        // $products = [];
-        // foreach ($carts as $cart) {
-
-
-        //     $products[] = product::find($cart->product_id);
-        // }
-
-        //
+         $cartItems = Auth::user()->Cart()->get();
+         foreach($cartItems as $cartItem)
+        $cartItem->product = product::find($cartItem->product_id);
+       
 
         // $price = 0;
         // foreach ($products as $product) $price += $product->price * $product->qty;
-        $products = Cart::price()[0];
+        //  $products = Cart::price()[0];
+        //  dd($cartItems);
         $price = Cart::price()[1];
         $total = Cart::price()[2];
         // dd($total);
-        return view('cart', ['products' => $products, 'price' => $price, 'total' => $total]);
+        return view('cart', ['cartItems' => $cartItems, 'price' => $price, 'total' => $total]);
     }
     public function getTotal()
     {

@@ -26,6 +26,12 @@ class ProductController extends Controller
     {
         //
         $products = product::paginate(9);
+        if (Auth::check()) {
+            foreach ($products as $product) {
+                $product->incart = Auth::user()->Cart()->where('product_id', $product->id)->get()->isNotEmpty();
+            }
+        }
+
         return view('home', compact('products'));
     }
 
@@ -49,6 +55,10 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         //
+        $this->validate($request, [
+            'image' => 'mimes:jpeg,jpg,png,gif|required|max:10000'
+
+        ]);
         $extension = "." . $request->image->getClientOriginalExtension();
         $name = basename($request->image->getClientOriginalName(), $extension) . time();
         $name = $name . $extension;
@@ -56,6 +66,7 @@ class ProductController extends Controller
         Storage::disk('public')->putFileAs('uploads', $request->image, $name);
 
         $path = '/uploads/' . $name;
+
 
         Product::create([
             'name' =>  $request->name,
@@ -87,8 +98,18 @@ class ProductController extends Controller
     public static function show($id)
     {
         //
-        $product = product::find($id);
-        $inCart = Auth::User()->cart()->where('product_id', $id)->get()->isNotEmpty();
+        try {
+            //code...
+            $inCart = false;
+            $product = product::find($id);
+            if (Auth::check()) {
+                $inCart = Auth::User()->cart()->where('product_id', $id)->get()->isNotEmpty();
+            }
+        } catch (\Exception $e) {
+
+            dd($e);
+        }
+
         return view('detailed', compact('product'), compact('inCart'));
     }
 
@@ -113,7 +134,7 @@ class ProductController extends Controller
      * @param  \App\product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update($id,Request $request, product $product)
+    public function update($id, Request $request, product $product)
     {
         //
 
@@ -133,7 +154,6 @@ class ProductController extends Controller
 
         $product->update(['name' => $request->name, 'description' => $request->description, 'price' => $request->price, 'qty' => $request->quantity, 'image' => $path]);
         return redirect()->back();
-    
     }
 
     /**

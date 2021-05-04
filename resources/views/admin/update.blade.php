@@ -1,7 +1,7 @@
 @extends('admin.layout')
 
 @section('admin-content')
-
+    <div class="col-md-8">
     <form class="mt-3" method="POST" action='/admin/product/update/{{$product->id}}' enctype='multipart/form-data'>
         {{ csrf_field() }}
         <div class="form-group">
@@ -29,4 +29,5 @@
 
         <button class="btn btn-dark py-2 mt-3 px-5" type="submit"> Submit </button>
     </form>
+</div>
 @endsection

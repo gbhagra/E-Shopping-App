@@ -18,7 +18,7 @@
 </style>
 
 @extends('layouts.app')
-@inject('Cart','App\Http\Controllers\ProductController' )
+{{-- @inject('Cart','App\Http\Controllers\ProductController' ) --}}
 @section('content')
     <div class="container">
         <div class="alert alert-info" role="alert" id="alert" style="visibility:hidden">
@@ -79,7 +79,7 @@
                         <div class="card-body w-100">
                             <h5 class="card-title">{{ $product->name }}</h5>
                             <h6 class="card-title p-0"><strong style="color:green"> ₹{{ $product->price }}</strong><span style=" text-decoration: line-through;"> ₹{{ $product->price+100 }}</span></h6>
-                            @if (Auth::check() && $Cart->inCart($product->id))
+                            @if (Auth::check() && $product->incart)
 
                                 <button style="color: white;background:#ff9f00 " class="btn ml-2 mr-2 p-2 addToCart "
                                     id="{{ $product->id }}" disabled> Already in cart</button>
@@ -105,21 +105,7 @@
             @endforeach
 
         </div>
-        {{-- <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Dashboard</div>
-
-                <div class="panel-body">
-                    @if (session('status'))
-                        <div class="alert alert-success">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    You are logged in!
-                </div>
-            </div>
-        </div> --}}
+  
     </div>
     <div class="paginate d-flex justify-content-center">
 

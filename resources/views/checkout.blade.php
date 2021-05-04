@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@inject('cart', 'App\Http\Controllers\CartController')
+
 
 @section('content')
     <div class="container">
@@ -21,59 +21,53 @@
                 </div>
 
                 <div class="col-12">
-                    {{-- {{dd($cart->index()->products)}} --}}
-                    @foreach ($cart->index()->products as $product)
-
-
-                        {{--  --}}
-                        {{-- <input type="text" onchange="this.form.submit()"> --}}
+                    @foreach ($cartItems as $cartItem)
 
                         <hr>
 
                         <div class="d-flex align-items-center justify-content-start">
                             <div class="d-flex">
-                                <img src="{{ $product->image }}" alt="prd-img" height="100" width="100">
+                                <img src="{{ $cartItem->product->image }}" alt="prd-img" height="100" width="100">
                                 <div class="ml-5">
-                                    <p>{{ $product->name }}</p>
-                                    <h5>₹{{ $product->price }}</h5>
+                                    <p>{{ $cartItem->product->name }}</p>
+                                    <h5>₹{{ $cartItem->product->price }}</h5>
                                 </div>
                             </div>
 
                             <div style="margin-left:22.5rem ">
-                                {{ $cart->getQty($product->id) }}
+                                {{ $cartItem->quantity }}
                             </div>
 
-
-
-
                         </div>
-                    @endforeach {{-- @endfor --}}
+                    @endforeach
                     <hr>
 
-                        
-      
-                        <div class="d-flex">
-                            <h4>Amount to be paid</h4>
-                            <h4 style="margin-left:22.5rem ">₹{{ $cart->index()->total }}</h4>
-                        </div>
-                        <hr>
-                        
-                        <ul style="row list-group;padding: 0px;"list-group">
-                           <li class="list-group-item"><h3>Payment options</h3>
-                           </li>
-                            <li class="list-group-item"> <input type="radio" name="payment-method" id="upi"> UPI </li>
-                            <li class="list-group-item"><input type="radio" name="payment-method" id="card"> Credit/Debit
-                                Card</li>
-                            <li class="list-group-item"><input type="radio" name="payment-method" id="wallets"> Wallets</li>
-                            <li class="list-group-item"><input type="radio" name="payment-method" id="cod"> Cash on delivery
-                            </li>
 
-                        </ul>
-                        <div class="justify-content-end d-flex">
-                            <a type="button" class="btn btn-danger mr-1 btn-lg" href="/cart"> Cancel</a>
-                            <a type="button" href="/order/summary" class="btn btn-warning mr-1 btn-lg" href="/cart"> Place Order</a>{{-- to be directed to congrats page --}}
-                        </div>
-                   
+
+                    <div class="d-flex">
+                        <h4>Amount to be paid</h4>
+                        <h4 style="margin-left:22.5rem ">₹{{ $total }}</h4>
+                    </div>
+                    <hr>
+
+                    <ul style="row list-group;padding: 0px;" list-group">
+                        <li class="list-group-item">
+                            <h3>Payment options</h3>
+                        </li>
+                        <li class="list-group-item"> <input type="radio" name="payment-method" id="upi"> UPI </li>
+                        <li class="list-group-item"><input type="radio" name="payment-method" id="card"> Credit/Debit
+                            Card</li>
+                        <li class="list-group-item"><input type="radio" name="payment-method" id="wallets"> Wallets</li>
+                        <li class="list-group-item"><input type="radio" name="payment-method" id="cod"> Cash on delivery
+                        </li>
+
+                    </ul>
+                    <div class="justify-content-end d-flex">
+                        <a type="button" class="btn btn-danger mr-1 btn-lg" href="/cart"> Cancel</a>
+                        <a type="button" href="/order/summary" class="btn btn-warning mr-1 btn-lg" href="/cart"> Place
+                            Order</a>{{-- to be directed to congrats page --}}
+                    </div>
+
 
 
                 </div>

@@ -35,10 +35,8 @@
                     </ul>
                 </div>
             </nav>
-            <div class="col-md-8">
-                @yield('admin-content')
-
-            </div>
+            @yield('admin-content')
+          
             {{-- @yield('content') --}}
         </div>
     </div>

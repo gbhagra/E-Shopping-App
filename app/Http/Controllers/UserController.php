@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\product;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Orders;
 
-class AdminController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +17,6 @@ class AdminController extends Controller
     public function index()
     {
         //
-        // dd(1);
-        return view('admin.layout');
     }
 
     /**
@@ -47,18 +46,19 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function showProducts()
+    public function show($id)
     {
-        $products = \App\Product::paginate(10);
-        return view('admin.products',compact('products'));
+        //
+        
+        $user = Auth::user();
+
+        
+    
+        $orders = Orders::where('user_id',$id)->get();
+        return view('admin.usersDetails',compact('user'),compact('orders'));
+     
     }
 
-    public function showUsers()
-    {
-        # code...
-        $users = User::all();
-        return view('admin.users',compact('users'));
-    }
     /**
      * Show the form for editing the specified resource.
      *
@@ -68,8 +68,6 @@ class AdminController extends Controller
     public function edit($id)
     {
         //
-        $product = product::find($id);
-        return view('admin.update' , compact('product'));    
     }
 
     /**
@@ -82,8 +80,6 @@ class AdminController extends Controller
     public function update(Request $request, $id)
     {
         //
-
-
     }
 
     /**
@@ -95,7 +91,5 @@ class AdminController extends Controller
     public function destroy($id)
     {
         //
-        product::destroy($id);
-        return redirect()->back();
     }
 }

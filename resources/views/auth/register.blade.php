@@ -4,7 +4,7 @@
     <div class="album py-5 bg-light">
         <div class="row justify-content-center align-items-center">
             <div class="col-3">
-                <h3 class="text-center">Login</h3>
+                <h3 class="text-center">Register</h3>
                 <form class="form-horizontal" method="POST" action="{{ route('register') }}">
                     {{ csrf_field() }}
 
