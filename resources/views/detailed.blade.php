@@ -19,32 +19,43 @@
                     <hr>
                     <h2 class="mb-4"> <i class="fas fa-rupee-sign"></i>{{ $product->price }}</h2>
                     <div class="justify-content-between d-flex">
-                        @if (Auth::check() && !$inCart)
-                            <button class="btn ml-2 mr-5 p-2 w-50 addToCart" name="addToCart"
-                                style="color: white;background:#ff9f00 " id="{{ $product->id }}"><i
-                                    class="fas fa-shopping-cart ml-1 mr-3"></i> Add to
-                                Cart</button>
-                            <a type="button" href="/cart/{{ $product->id }}" class="btn px-5"
-                                style="width : 50%;color:white;background:#fb641b"><i class="fas fa-bolt ml-1 mr-3"></i>Buy
-                                Now</a>
-                        @elseif (!(Auth::check()))
-
-                            <button class="btn ml-2 mr-5 p-2 w-50 addToCart" name="addToCart"
-                                style="color: white;background:#ff9f00 " id="{{ $product->id }}"><i
-                                    class="fas fa-shopping-cart ml-1 mr-3"></i> Add to
-                                Cart</button>
-                            <a type="button" href="/cart/{{ $product->id }}" class="btn px-5"
-                                style="width : 50%;color:white;background:#fb641b"><i class="fas fa-bolt ml-1 mr-3"></i>Buy
-                                Now</a>
-
+                        @if ($product->qty <= 0) <button
+                                style="color: white;background:#ff9f00 " class="btn ml-2 p-3 w-100 addToCart "
+                                id="{{ $product->id }}" disabled> Out of
+                                stock</button>
                         @else
-                            <button class="btn ml-2 mr-5 p-2 w-50 addToCart disabled" name="addToCart"
-                                style="color: white;background:#ff9f00 "><i class="fas fa-shopping-cart ml-1 mr-3"></i>
-                                Already in Cart</button>
+                            @if (Auth::check() && !$inCart)
+                                <button class="btn ml-2 mr-5 p-2 w-50 addToCart" name="addToCart"
+                                    style="color: white;background:#ff9f00 " id="{{ $product->id }}"><i
+                                        class="fas fa-shopping-cart ml-1 mr-3"></i> Add to
+                                    Cart</button>
+                                <a type="button" href="/cart/{{ $product->id }}" class="btn px-5"
+                                    style="width : 50%;color:white;background:#fb641b"><i
+                                        class="fas fa-bolt ml-1 mr-3"></i>Buy
+                                    Now</a>
 
-                            <a type="button" href="/cart" class="btn px-5"
-                                style="width : 50%;color:white;background:#fb641b"><i class="fas fa-bolt ml-1 mr-3"></i>Buy
-                                Now</a>
+                            @elseif (!(Auth::check()))
+
+                                <button class="btn ml-2 mr-5 p-2 w-50 addToCart" name="addToCart"
+                                    style="color: white;background:#ff9f00 " id="{{ $product->id }}"><i
+                                        class="fas fa-shopping-cart ml-1 mr-3"></i> Add to
+                                    Cart</button>
+                                <a type="button" href="/cart/{{ $product->id }}" class="btn px-5"
+                                    style="width : 50%;color:white;background:#fb641b"><i
+                                        class="fas fa-bolt ml-1 mr-3"></i>Buy
+                                    Now</a>
+
+
+                            @else
+                                <button class="btn ml-2 mr-5 p-2 w-50 addToCart disabled" name="addToCart"
+                                    style="color: white;background:#ff9f00 "><i class="fas fa-shopping-cart ml-1 mr-3"></i>
+                                    Already in Cart</button>
+
+                                <a type="button" href="/cart" class="btn px-5"
+                                    style="width : 50%;color:white;background:#fb641b"><i
+                                        class="fas fa-bolt ml-1 mr-3"></i>Buy
+                                    Now</a>
+                            @endif
                         @endif
                         {{-- <button
                                     class="btn btn-info ml-2 mr-5 p-2 w-50 addToCart {{ $inCart == true ? 'disabled' : '' }} " onclick="location.href='/cart/{{ $product->id }}'"

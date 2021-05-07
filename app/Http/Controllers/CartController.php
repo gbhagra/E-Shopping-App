@@ -27,10 +27,10 @@ class CartController extends Controller
         //CART->PRODID
         //CART->PRODUCT = PRODUCT WHERE ID = CART->PRODUCTID
 
-         $cartItems = Auth::user()->Cart()->get();
-         foreach($cartItems as $cartItem)
-        $cartItem->product = product::find($cartItem->product_id);
-       
+        $cartItems = Auth::user()->Cart()->get();
+        foreach ($cartItems as $cartItem)
+            $cartItem->product = product::find($cartItem->product_id);
+
 
         // $price = 0;
         // foreach ($products as $product) $price += $product->price * $product->qty;
@@ -46,7 +46,7 @@ class CartController extends Controller
         # code...
         $price = Cart::price()[1];
         $total = Cart::price()[2];
-        return ['total'=>$total,'price'=>$price];
+        return ['total' => $total, 'price' => $price];
     }
 
     public function getQty($prod_id)
@@ -77,14 +77,15 @@ class CartController extends Controller
 
         //store in db
         // dd(Auth::user());
-        $inCart = Auth::User()->cart()->where('product_id',$id)->get()->isNotEmpty();
-        if(!$inCart){
-        Cart::create([
-            'user_id' => Auth::user()->id,
-            'product_id' => $id,
-            'quantity' => 1
+        $inCart = Auth::User()->cart()->where('product_id', $id)->get()->isNotEmpty();
+        
+        if (!$inCart) {
+            Cart::create([
+                'user_id' => Auth::user()->id,
+                'product_id' => $id,
+                'quantity' => 1
 
-        ]);
+            ]);
         }
         return redirect('/cart');
     }
@@ -124,7 +125,7 @@ class CartController extends Controller
         //->get user's cart 
         //->find the product and upate its quantity
         $prod = product::find($id);
-        if($request->qty <1)return 1;
+        if ($request->qty < 1) return 1;
         if ($request->qty <= $prod->qty) {
             $cart = Auth::user()->Cart();
             $cart->where('product_id', $id)->update(['quantity' => $request->qty]);
@@ -132,7 +133,7 @@ class CartController extends Controller
         }
         // dd($cart);
 
-        return "Only ". $prod->qty ." in stock";
+        return "Only " . $prod->qty . " in stock";
     }
 
     /**

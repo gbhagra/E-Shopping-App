@@ -44,6 +44,7 @@
                         <p>One Stop for every products you need</p>
                         <a type="button" href="/" class="btn btn-outline-light"> Start Shopping </a>
                     </div>
+                    
                 </div>
                 <div class="carousel-item">
                     <div class="d-flex justify-content-center w-100 h-100" style="background-image: url('/black.png')">
@@ -78,13 +79,18 @@
                                 alt="..." style="padding:20px"></a>
                         <div class="card-body w-100">
                             <h5 class="card-title">{{ $product->name }}</h5>
-                            <h6 class="card-title p-0"><strong style="color:green"> ₹{{ $product->price }}</strong><span style=" text-decoration: line-through;"> ₹{{ $product->price+100 }}</span></h6>
+                            <h6 class="card-title p-0"><strong style="color:green"> ₹{{ $product->price }}</strong><span
+                                    style=" text-decoration: line-through;"> ₹{{ $product->price + 100 }}</span></h6>
                             @if (Auth::check() && $product->incart)
 
                                 <button style="color: white;background:#ff9f00 " class="btn ml-2 mr-2 p-2 addToCart "
                                     id="{{ $product->id }}" disabled> Already in cart</button>
                                 <a type="button" href="/cart" class="btn ml-5 p-2 buyNow" name="buyNow"
                                     style="color:white;background:#fb641b"><i class="fas fa-bolt ml-1 mr-1"></i>Buy Now</a>
+                            @elseif ($product->qty == 0)
+
+                                <button style="color: white;background:#ff9f00 " class="btn ml-2 p-3 w-100 addToCart "
+                                    id="{{ $product->id }}" disabled> Out of stock</button>
 
                             @else
                                 <button style="color: white;background:#ff9f00 " class="btn ml-2 mr-2 p-2 addToCart"
@@ -105,7 +111,7 @@
             @endforeach
 
         </div>
-  
+
     </div>
     <div class="paginate d-flex justify-content-center">
 
@@ -142,5 +148,5 @@
         })
 
     </script>
- 
+
 @endsection

@@ -50,14 +50,14 @@ class AdminController extends Controller
     public function showProducts()
     {
         $products = \App\Product::paginate(10);
-        return view('admin.products',compact('products'));
+        return view('admin.products', compact('products'));
     }
 
     public function showUsers()
     {
         # code...
         $users = User::all();
-        return view('admin.users',compact('users'));
+        return view('admin.users', compact('users'));
     }
     /**
      * Show the form for editing the specified resource.
@@ -69,7 +69,7 @@ class AdminController extends Controller
     {
         //
         $product = product::find($id);
-        return view('admin.update' , compact('product'));    
+        return view('admin.update', compact('product'));
     }
 
     /**
@@ -92,10 +92,10 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
         //
-        product::destroy($id);
+        product::destroy($request->id);
         return redirect()->back();
     }
 }

@@ -25,21 +25,25 @@
 
                 <thead class="table-info">
                     <tr>
-
+                        <th class="text-center">Thumbnail</th>
                         <th class='text-center'>Order Id</th>
                         <th class='text-center'>Product Id</th>
                         <th class='text-center'>Quantity</th>
+                        <th class="text-center">Price (<i class="fas fa-rupee-sign"></i>)</th>
                     </tr>
 
                 </thead>
 
                 <tbody>
                     @foreach ($orders as $order)
+                    
                         <tr>
-
+                            <td><img src="{{$order->image}}" alt="" height="150px" width="150px"></td>
                             <td class='text-center'>{{ $order->id }}</td>
                             <td class='text-center'>{{ $order->product_id }}</td>
                             <td class='text-center'>{{ $order->quantity }}</td>
+                            <td class='text-center'>{{ $order->price }}</td>
+
                         </tr>
                     @endforeach
                 </tbody>

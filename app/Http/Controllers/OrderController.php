@@ -84,7 +84,13 @@ class OrderController extends Controller
         # code...
         try {
             $user = Auth::user();
-            $orders = Orders::where('user_id', $user->id)->get();
+            
+            $orders = Orders::join('products', function ($join) {
+
+                $join->on('orders.product_id', '=', 'products.id')->where('orders.user_id', Auth::user()->id);
+            
+            })->select('*', 'orders.quantity as order_quantity')->get();
+            
         } catch (\Exception $e) {
             dd($e);
         }

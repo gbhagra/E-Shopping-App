@@ -10,25 +10,25 @@
         {{ csrf_field() }}
         <div class="form-group">
             <label for="name">Name</label>
-            <input type="text" class="form-control" name='name' id="name" required>
+            <input type="text" class="form-control" name='name' id="name" required value="{{old('name')}}">
         </div>
         <div class="form-group">
             <label for="description">Description</label>
-            <textarea class="form-control" name='description' id="description" rows="5" required></textarea>
+            <textarea class="form-control" name='description' id="description" rows="5" required >{{old('description')}}</textarea>
         </div>
         <div class="d-flex">
             <div class="form-group">
                 <label for="price">Price</label>
-                <input type="number" class="form-control" name='price' id="price" required>
+                <input type="number" class="form-control" name='price' id="price" required value="{{old('price')}}" min="1">
             </div>
             <div class="form-group ml-5">
                 <label for="quantity">Quantity</label>
-                <input type="number" class="form-control" name='quantity' id="quantity" required>
+                <input type="number" class="form-control" name='quantity' id="quantity" required value="{{old('quantity')}}" min="1">
             </div>
         </div>
         <div class="form-group">
             <label for="image">Image</label>
-            <input type="file" class="form-control" name='image' id="image" required>
+            <input type="file" class="form-control" name='image' id="image" >
             @if (count($errors))
                 <div class="alert alert-danger">
                     <ul style="list-style:none">

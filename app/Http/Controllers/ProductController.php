@@ -56,7 +56,11 @@ class ProductController extends Controller
     {
         //
         $this->validate($request, [
-            'image' => 'mimes:jpeg,jpg,png,gif|required|max:10000'
+            'image' => 'mimes:jpeg,jpg,png,gif|max:10000',
+            'name' => 'required|alpha_num|min:2',
+            'description' => 'required',
+            'price' => 'required|numeric|min:1',
+            'quantity' => 'required|numeric|min:1'
 
         ]);
         $extension = "." . $request->image->getClientOriginalExtension();
@@ -137,7 +141,14 @@ class ProductController extends Controller
     public function update($id, Request $request, product $product)
     {
         //
+        $this->validate($request, [
+            'image' => 'mimes:jpeg,jpg,png,gif|max:10000',
+            'name' => 'required|alpha_num|min:2',
+            'description' => 'required',
+            'price' => 'required|numeric|min:1',
+            'quantity' => 'required|numeric|min:1'
 
+        ]);
 
         $product = product::find($id);
         $path = $product->image;
@@ -153,6 +164,7 @@ class ProductController extends Controller
         }
 
         $product->update(['name' => $request->name, 'description' => $request->description, 'price' => $request->price, 'qty' => $request->quantity, 'image' => $path]);
+        \Session::flash('message', 'Product updated successfully'); 
         return redirect()->back();
     }
 

@@ -29,7 +29,7 @@
             </thead>
             <tbody>
                 @foreach ($products as $product)
-                    <tr class="align-self-center">
+                    <tr class="align-self-center" id="delete{{ $product->id }}">
 
                         <td class='text-center'> <img src="{{ $product->image }}" alt="thumbnail" height="50px"
                                 width="50px">
@@ -43,17 +43,18 @@
                             <div class="d-flex justify-content-center">
                                 <a href="/admin/product/update/{{ $product->id }}" class="btn btn-sm btn-dark"
                                     style="margin-left:5px " type="button"> Update </a>
-                                <form action="/admin/products/{{ $product->id }}" method="POST">
+                                <form action="/admin/products/{{ $product->id }}" method="POST" class="delete"
+                                    id="{{ $product->id }}">
                                     {{ csrf_field() }}
                                     {{-- {{ method_field('DELETE') }} --}}
-                                    <button class="btn btn-sm btn-info ml-2" type="submit">Delete</button>
-                                </form>
+                                    <button class="btn btn-sm btn-info ml-2" type="submit" ">Delete</button>
+                                            </form>
 
-                            </div>
-                        </td>
+                                        </div>
+                                    </td>
 
-                    </tr>
-                @endforeach()
+                                </tr>
+                               @endforeach()
 
             </tbody>
         </table>
@@ -61,4 +62,26 @@
             {{ $products->links() }}
         </div>
     </div>
+    <script>
+        $('.delete').submit(function(e) {
+            e.preventDefault();
+            let id = e.target.id;
+            console.log(id);
+            if (confirm('you really want ot delete this product ?')) {
+                $.ajax({
+                    url: `/admin/products/{id}`,
+                    type: 'POST',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        "id": id
+                    },
+                    success: function() {
+                        alert('product deleted');
+                        $(`#delete${id}`).remove();
+                    }
+                });
+            }
+        });
+
+    </script>
 @endsection

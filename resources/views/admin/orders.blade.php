@@ -69,7 +69,7 @@
         </table>
         <script>
             $('.status').on('change', function(e) {
-
+                if(confirm("Do yo want change the status")){
                 let status = e.target.value;
                 let orderId = e.target.id;
                 $.ajax({
@@ -93,6 +93,7 @@
                         }
                     }
                 });
+                }
             });
 
         </script>
