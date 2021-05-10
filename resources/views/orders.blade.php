@@ -39,10 +39,10 @@
                     
                         <tr>
                             <td><img src="{{$order->image}}" alt="" height="150px" width="150px"></td>
-                            <td class='text-center'>{{ $order->id }}</td>
+                            <td class='text-center'>{{ $order->order_id }}</td>
                             <td class='text-center'>{{ $order->product_id }}</td>
                             <td class='text-center'>{{ $order->quantity }}</td>
-                            <td class='text-center'>{{ $order->price }}</td>
+                            <td class='text-center'>{{ $order->price * $order->quantity }}</td>
 
                         </tr>
                     @endforeach

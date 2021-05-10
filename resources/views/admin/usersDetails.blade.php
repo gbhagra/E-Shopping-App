@@ -14,12 +14,12 @@
                 </tr>
 
             </thead>
-
             <tbody>
                 @foreach ($orders as $order)
-                    <tr>
+                <tr>
+                        {{-- {{dd($order)}} --}}
 
-                        <td class='text-center'>{{ $order->id }}</td>
+                        <td class='text-center'>{{ $order->order_id }}</td>
                         <td class='text-center'>{{ $order->product_id }}</td>
                         <td class='text-center'>{{ $order->quantity }}</td>
                     </tr>

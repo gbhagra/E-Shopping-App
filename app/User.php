@@ -27,27 +27,45 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-   
+
+    # code...
+    /**
+     * Get all of the comments for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function Orders()
+    {
+        return $this->hasMany(Orders::class);
+    }
+
+    public function cart()
+    {
+        return $this->hasOne(Cart::class);
+    }
+
+    public function shipping()
+    {
         # code...
-      /**
-         * Get all of the comments for the User
-         *
-         * @return \Illuminate\Database\Eloquent\Relations\HasMany
-         */
-        public function Orders()
-        {
-            return $this->hasMany(Orders::class);
-        }
-        
-        public function cart()
-        {
-            return $this->hasOne(Cart::class);
-        }
 
-        public function shipping()
-        {
-            # code...
+        return $this->hasOne(Shipping::class);
+    }
+    public static function getUser($id)
+    {
+        # code...
+        return User::find($id);
+    }
+    public static function showOrder($id)
+    {
+        try {
+            $orders = Orders::join('products', function ($join) {
 
-            return $this->hasOne(Shipping::class);
+                $join->on('orders.product_id', '=', 'products.id');
+            })->where('orders.user_id', $id)->select('*', 'orders.quantity as order_quantity', 'orders.id as order_id')->get();
+        } catch (\Exception $e) {
+            return view('layouts.errors', ["errors" => $e->getMessage()]);
         }
+        // dd($orders);
+        return $orders;
+    }
 }

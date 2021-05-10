@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\product;
 use App\User;
+use Exception;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -49,7 +50,14 @@ class AdminController extends Controller
      */
     public function showProducts()
     {
-        $products = \App\Product::paginate(10);
+        try {
+            //code...
+            $products = \App\Product::paginate(10);
+        } catch (Exception $e) {
+            //throw $th;
+            return view('layouts.errors',['errors'=>$e->getMessage()]);
+        }
+
         return view('admin.products', compact('products'));
     }
 
@@ -68,7 +76,15 @@ class AdminController extends Controller
     public function edit($id)
     {
         //
-        $product = product::find($id);
+        try {
+            //code...
+            $product = product::getProduct($id);
+        } catch (Exception $e) {
+            //throw $th;
+            return view('layouts.errors',['errors'=>$e->getMessage()]);
+            
+        }
+
         return view('admin.update', compact('product'));
     }
 

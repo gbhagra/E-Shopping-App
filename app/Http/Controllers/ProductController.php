@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Cart;
 use App\product;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use ProductSeeder;
 
 class ProductController extends Controller
 {
@@ -25,13 +27,16 @@ class ProductController extends Controller
     public function index()
     {
         //
-        $products = product::paginate(9);
-        if (Auth::check()) {
-            foreach ($products as $product) {
-                $product->incart = Auth::user()->Cart()->where('product_id', $product->id)->get()->isNotEmpty();
+        try {
+            $products = product::paginate(9);
+            if (Auth::check()) {
+                foreach ($products as $product) {
+                    $product->incart = $this->inCart($product->id);
+                }
             }
+        } catch (Exception $e) {
+            return view('layouts.errors', ['errors' => $e->getMessage()]);
         }
-
         return view('home', compact('products'));
     }
 
@@ -55,31 +60,29 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         //
-        $this->validate($request, [
-            'image' => 'mimes:jpeg,jpg,png,gif|max:10000',
-            'name' => 'required|alpha_num|min:2',
-            'description' => 'required',
-            'price' => 'required|numeric|min:1',
-            'quantity' => 'required|numeric|min:1'
+        try {
+            $this->validate($request, [
+                'image' => 'mimes:jpeg,jpg,png,gif|required|max:10000',
+                'name' => 'required|alpha_num|min:2',
+                'description' => 'required',
+                'price' => 'required|numeric|min:1',
+                'quantity' => 'required|numeric|min:1'
 
-        ]);
-        $extension = "." . $request->image->getClientOriginalExtension();
-        $name = basename($request->image->getClientOriginalName(), $extension) . time();
-        $name = $name . $extension;
+            ]);
+            $extension = "." . $request->image->getClientOriginalExtension();
+            $name = basename($request->image->getClientOriginalName(), $extension) . time();
+            $name = $name . $extension;
 
-        Storage::disk('public')->putFileAs('uploads', $request->image, $name);
+            Storage::disk('public')->putFileAs('uploads', $request->image, $name);
 
-        $path = '/uploads/' . $name;
+            $path = '/uploads/' . $name;
 
 
-        Product::create([
-            'name' =>  $request->name,
-            'description' => $request->description,
-            'price' => $request->price,
-            'qty' => $request->quantity,
-            'image' => $path
-        ]);
-        \Session::flash('message', "Product added successfully");
+            Product::createProduct($request, $path);
+            \Session::flash('message', "Product added successfully");
+        } catch (Exception $e) {
+            return view('layouts.errors', ['errors' => $e->getMessage()]);
+        }
 
         return redirect()->back();
     }
@@ -94,9 +97,7 @@ class ProductController extends Controller
     public function inCart($id)
     {
         # code...
-
-        $inCart = Auth::User()->cart()->where('product_id', $id)->get()->isNotEmpty();
-        return $inCart;
+        return  Product::inCart($id);
     }
 
     public static function show($id)
@@ -105,13 +106,13 @@ class ProductController extends Controller
         try {
             //code...
             $inCart = false;
-            $product = product::find($id);
+            $product = product::getProduct($id);
             if (Auth::check()) {
-                $inCart = Auth::User()->cart()->where('product_id', $id)->get()->isNotEmpty();
+                $inCart = Product::inCart($id);
             }
         } catch (\Exception $e) {
 
-            dd($e);
+            return view('layouts.errors', ['errors' => $e->getMessage()]);
         }
 
         return view('detailed', compact('product'), compact('inCart'));
@@ -126,7 +127,7 @@ class ProductController extends Controller
     public function edit($id)
     {
         //
-        $product = product::find($id);
+        $product = product::getProduct($id);
         return view('admin.update', compact('product'));
     }
 
@@ -141,30 +142,34 @@ class ProductController extends Controller
     public function update($id, Request $request, product $product)
     {
         //
-        $this->validate($request, [
-            'image' => 'mimes:jpeg,jpg,png,gif|max:10000',
-            'name' => 'required|alpha_num|min:2',
-            'description' => 'required',
-            'price' => 'required|numeric|min:1',
-            'quantity' => 'required|numeric|min:1'
+        try {
+            $this->validate($request, [
+                'image' => 'mimes:jpeg,jpg,png,gif|max:10000',
+                'name' => 'required|alpha_num|min:2',
+                'description' => 'required',
+                'price' => 'required|numeric|min:1',
+                'quantity' => 'required|numeric|min:1'
 
-        ]);
+            ]);
 
-        $product = product::find($id);
-        $path = $product->image;
-        // add check for extension of file
-        if ($request->image) {
-            $extension = "." . $request->image->getClientOriginalExtension();
-            $name = basename($request->image->getClientOriginalName(), $extension) . time();
-            $name = $name . $extension;
+            $product = product::getProduct($id);
+            $path = $product->image;
+            // add check for extension of file
+            if ($request->image) {
+                $extension = "." . $request->image->getClientOriginalExtension();
+                $name = basename($request->image->getClientOriginalName(), $extension) . time();
+                $name = $name . $extension;
 
 
-            Storage::disk('public')->putFileAs('uploads', $request->image, $name);
-            $path = '/uploads/' . $name;
+                Storage::disk('public')->putFileAs('uploads', $request->image, $name);
+                $path = '/uploads/' . $name;
+            }
+
+            Product::Productupdate($request, $product, $path);
+            \Session::flash('message', 'Product updated successfully');
+        } catch (Exception $e) {
+            return view('layouts.errors', ['errors' => $e->getMessage()]);
         }
-
-        $product->update(['name' => $request->name, 'description' => $request->description, 'price' => $request->price, 'qty' => $request->quantity, 'image' => $path]);
-        \Session::flash('message', 'Product updated successfully'); 
         return redirect()->back();
     }
 

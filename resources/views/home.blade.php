@@ -38,13 +38,13 @@
             </ol>
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img class="d-block w-100" src="{{ $products[3]->image }}" alt="First slide" style="height: 50vh">
+                    <img class="d-block w-100" src="{{ $products[1]->image }}" alt="First slide" style="height: 50vh">
                     <div class="carousel-caption">
                         <h3>Welcome to OneStop Shop</h3>
                         <p>One Stop for every products you need</p>
                         <a type="button" href="/" class="btn btn-outline-light"> Start Shopping </a>
                     </div>
-                    
+
                 </div>
                 <div class="carousel-item">
                     <div class="d-flex justify-content-center w-100 h-100" style="background-image: url('/black.png')">

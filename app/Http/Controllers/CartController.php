@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Cart;
 use App\product;
 use Error;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,33 +27,35 @@ class CartController extends Controller
         // USER->CART
         //CART->PRODID
         //CART->PRODUCT = PRODUCT WHERE ID = CART->PRODUCTID
+        try {
+            //code...
+            $cartItems = Auth::user()->Cart()->get();
+            foreach ($cartItems as $cartItem)
+                $cartItem->product = product::getProduct($cartItem->product_id);
 
-        $cartItems = Auth::user()->Cart()->get();
-        foreach ($cartItems as $cartItem)
-            $cartItem->product = product::find($cartItem->product_id);
-
-
-        // $price = 0;
-        // foreach ($products as $product) $price += $product->price * $product->qty;
-        //  $products = Cart::price()[0];
-        //  dd($cartItems);
-        $price = Cart::price()[1];
-        $total = Cart::price()[2];
-        // dd($total);
+            $price = Cart::price()[1];
+            $total = Cart::price()[2];
+        } catch (\Exception $e) {
+            return view('layouts.errors', ["errors" => $e->getMessage()]);
+        }
         return view('cart', ['cartItems' => $cartItems, 'price' => $price, 'total' => $total]);
     }
     public function getTotal()
     {
         # code...
-        $price = Cart::price()[1];
-        $total = Cart::price()[2];
+        try {
+
+            $price = Cart::price()[1];
+            $total = Cart::price()[2];
+        } catch (\Exception $e) {
+            return view('layouts.errors', ["errors" => $e->getMessage()]);
+        }
         return ['total' => $total, 'price' => $price];
     }
 
-    public function getQty($prod_id)
+    public function getCartQty($prod_id)
     {
-        $prod = Auth::user()->Cart()->where('product_id', $prod_id)->get();
-        return $prod[0]->quantity;
+        return Cart::getQty($prod_id);
     }
 
     /**
@@ -74,18 +77,13 @@ class CartController extends Controller
     public function store($id)
     {
         //validation required 
-
         //store in db
-        // dd(Auth::user());
-        $inCart = Auth::User()->cart()->where('product_id', $id)->get()->isNotEmpty();
-        
-        if (!$inCart) {
-            Cart::create([
-                'user_id' => Auth::user()->id,
-                'product_id' => $id,
-                'quantity' => 1
+        try {
 
-            ]);
+            $inCart = Product::inCart($id);
+            if (!$inCart) Cart::createCart($id);
+        } catch (Exception $e) {
+            return view('layouts.errors', ["errors" => $e->getMessage()]);
         }
         return redirect('/cart');
     }
@@ -121,19 +119,7 @@ class CartController extends Controller
      */
     public function update($id, Request $request)
     {
-        //find product -> if product quantity > requested quantity 
-        //->get user's cart 
-        //->find the product and upate its quantity
-        $prod = product::find($id);
-        if ($request->qty < 1) return 1;
-        if ($request->qty <= $prod->qty) {
-            $cart = Auth::user()->Cart();
-            $cart->where('product_id', $id)->update(['quantity' => $request->qty]);
-            return $request->qty;
-        }
-        // dd($cart);
-
-        return "Only " . $prod->qty . " in stock";
+        return Cart::updateCart($request, $id);
     }
 
     /**
@@ -145,7 +131,7 @@ class CartController extends Controller
     public function destroy($id)
     {
         //
-        Cart::where('user_id', Auth::user()->id)->where('product_id', $id)->delete();
+        Cart::deleteCart($id);
 
         return redirect()->back();
     }

@@ -22,15 +22,15 @@
 
                 <div class="col-12">
                     @foreach ($cartItems as $cartItem)
-
+                        {{-- {{dd($cartItem)}} --}}
                         <hr>
 
                         <div class="d-flex align-items-center justify-content-start">
                             <div class="d-flex">
-                                <img src="{{ $cartItem->product->image }}" alt="prd-img" height="100" width="100">
+                                <img src="{{ $cartItem->image }}" alt="prd-img" height="100" width="100">
                                 <div class="ml-5">
-                                    <p>{{ $cartItem->product->name }}</p>
-                                    <h5>₹{{ $cartItem->product->price }}</h5>
+                                    <p>{{ $cartItem->name }}</p>
+                                    <h5>₹{{ $cartItem->price }}</h5>
                                 </div>
                             </div>
 

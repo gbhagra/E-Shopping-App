@@ -45,19 +45,19 @@
                         <td class='text-center'>
                             @if ($order->status == 1) {{-- confirmed --}}
                                 <div class="alert alert-success" id="status{{ $order->id }}">
-                                    {{ $order->status }}
+                                    Confirmed
                                 </div>
                             @elseif( $order->status == 2 ) {{-- dispatched --}}
                                 <div class="alert alert-warning" id="status{{ $order->id }}">
-                                    {{ $order->status }}
+                                    Dispatched
                                 </div>
                             @elseif ($order->status == 3) {{-- delivered --}}
                                 <div class="alert alert-info" id="status{{ $order->id }}">
-                                    {{ $order->status }}
+                                    Delivered
                                 </div>
                             @elseif ($order->status == 0){{-- pending --}}
                                 <div class="alert alert-danger" id="status{{ $order->id }}">
-                                    {{ $order->status }}
+                                    pending
                                 </div>
                             @endif
                         </td>
@@ -69,30 +69,34 @@
         </table>
         <script>
             $('.status').on('change', function(e) {
-                if(confirm("Do yo want change the status")){
-                let status = e.target.value;
-                let orderId = e.target.id;
-                $.ajax({
-                    url: `orders/status/${orderId}/${status}`,
-                    type: "GET",
-                    success: function(response) {
-                        $(`#status${orderId}`).text(response);
+                if (confirm("Do yo want change the status")) {
+                    let status = e.target.value;
+                    let orderId = e.target.id;
+                    $.ajax({
+                        url: `orders/status/${orderId}/${status}`,
+                        type: "GET",
+                        success: function(response) {
+                            $(`#status${orderId}`).text(response);
 
-                        if (response == 1) {
-                            document.getElementById(`status${orderId}`).className =
-                                "alert alert-success";
-                        } else if (response == 2) {
-                            document.getElementById(`status${orderId}`).className =
-                                "alert alert-warning";
-
-                        } else if (response == 3) {
-                            document.getElementById(`status${orderId}`).className = "alert alert-info";
-                        } else {
-                            document.getElementById(`status${orderId}`).className =
-                                "alert alert-danger";
+                            if (response == 1) {
+                                document.getElementById(`status${orderId}`).className =
+                                    "alert alert-success";
+                                $(`#status${orderId}`).text('confirmed');
+                            } else if (response == 2) {
+                                document.getElementById(`status${orderId}`).className =
+                                    "alert alert-warning";
+                                $(`#status${orderId}`).text('Dispatched');
+                            } else if (response == 3) {
+                                document.getElementById(`status${orderId}`).className =
+                                    "alert alert-info";
+                                $(`#status${orderId}`).text('Delivered');
+                            } else {
+                                document.getElementById(`status${orderId}`).className =
+                                    "alert alert-danger";
+                                $(`#status${orderId}`).text('Pending');
+                            }
                         }
-                    }
-                });
+                    });
                 }
             });
 

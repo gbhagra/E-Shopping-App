@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Orders;
+use App\User;
 
 class UserController extends Controller
 {
@@ -48,17 +48,12 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
-        
-        $user = Auth::user();
 
-        
-    
-        $orders = Orders::where('user_id',$id)->get();
-        return view('admin.usersDetails',compact('user'),compact('orders'));
-     
+        $user = User::getUser($id);
+        $orders = User::showOrder($id);
+        return view('admin.usersDetails', compact('user'), compact('orders'));
     }
-
+   
     /**
      * Show the form for editing the specified resource.
      *

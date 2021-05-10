@@ -29,8 +29,8 @@ class ShippingController extends Controller
     public function create()
     {
         //
-        if((auth()->user()->shipping()->get()->isNotEmpty()))
-        return redirect('/order/confirmation');// change it to order summary
+        if ((auth()->user()->shipping()->get()->isNotEmpty()))
+            return redirect('/order/confirmation'); // change it to order summary
         return view('shipping');
     }
 
@@ -42,15 +42,8 @@ class ShippingController extends Controller
      */
     public function store(Request $request)
     {
-        //
-       
-        Shipping::create([
-            'user_id' => auth()->user()->id,
-            'name' => $request->name,
-            'address' => $request->address ." ".$request->pincode ." ". $request->state,
-            'phone' => $request->phone
-        ]);
-        
+        Shipping::store($request);
+
         return redirect('/order/confirmation');
     }
 
