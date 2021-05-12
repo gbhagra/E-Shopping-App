@@ -18,31 +18,28 @@ class Orders extends Model
         return $order;
     }
 
-    public static function checkout()
+    public static function checkout($id)
     {
 
         try {
 
-            // $cartItems = Cart::getCart();
-
             $cartItems = Cart::join('products',function($join){
                 $join->on('carts.product_id','=','products.id')->where('carts.user_id', Auth::user()->id);
             })->select('*')->get();
-            
-            // foreach ($cartItems as $cartItem)
-            //     $cartItem->product = product::find($cartItem->product_id);
-
 
             $price = Cart::price()[1];
             $total = Cart::price()[2];
-            $shipping = Auth::user()->shipping;
+            $shipping = Auth::user()->shipping->find($id);
+        //    dd($id);
+            // $shipping = 
+            
         } catch (\Exception $e) {
             return view('layouts.errors', ["errors" => $e->getMessage()]);
         }
-        return view('checkout', ['cartItems' => $cartItems, 'price' => $price, 'total' => $total, 'shipping' => $shipping]);
+        return ['cartItems' => $cartItems, 'price' => $price, 'total' => $total, 'shipping' => $shipping];
     }
 
-    public static function storeOrder()
+    public static function storeOrder($id)
     {
         # code...
         try {
@@ -51,11 +48,14 @@ class Orders extends Model
             $order_id = Orders::latest()->first()->id + 1; // get the last order id 
             
             // puting in order against a constant order_id
+            $shipping = Auth::user()->shipping->find($id);
+            
             foreach ($carts as $cart) {
                 Orders::create([
                     'user_id' => Auth::user()->id,
                     'order_id' => $order_id,
                     'product_id' => $cart->product_id,
+                    'shipping_id' =>$shipping->id,
                     'quantity' => $cart->quantity,
                 ]);
                 // updating the quantity of product
@@ -79,12 +79,11 @@ class Orders extends Model
     {
         # code...
         try {
-            $user = Auth::user();
 
             $orders = Orders::join('products', function ($join) {
 
                 $join->on('orders.product_id', '=', 'products.id')->where('orders.user_id', Auth::user()->id);
-            })->select('*', 'orders.quantity as order_quantity','orders.id as order_id' )->get();
+            })->select('*', 'orders.quantity as order_quantity' )->get();
         } catch (\Exception $e) {
             return view('layouts.errors', ["errors" => $e->getMessage()]);
         }

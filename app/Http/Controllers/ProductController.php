@@ -29,9 +29,19 @@ class ProductController extends Controller
         //
         try {
             $products = product::paginate(9);
+            //cart items
+            //new array . push ( product->id )
+            //new array prodids 
             if (Auth::check()) {
+                $all = Cart::getCart();
+                $product_id = [];
+                foreach ($all as $cart) {
+                    $product_id[] = $cart->product_id;
+                }
+
+
                 foreach ($products as $product) {
-                    $product->incart = $this->inCart($product->id);
+                    $product->incart = in_array($product->id, $product_id);
                 }
             }
         } catch (Exception $e) {
@@ -93,12 +103,6 @@ class ProductController extends Controller
      * @param  \App\product  $product
      * @return \Illuminate\Http\Response
      */
-
-    public function inCart($id)
-    {
-        # code...
-        return  Product::inCart($id);
-    }
 
     public static function show($id)
     {

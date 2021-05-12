@@ -1,52 +1,60 @@
-
 <div class="navbar sticky-top navbar-dark bg-primary shadow-sm ">
     <div class="container d-flex justify-content-between">
-      <a href="/products" class="navbar-brand d-flex align-items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2" viewBox="0 0 24 24" focusable="false"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        <strong>OneStop Shop</strong>
-      </a>
-      <ul class="d-flex flex-column flex-md-row align-items-center p-1 list-group">
-        <!-- Authentication Links -->
-        @if (Auth::guest())
-            <li class="nav navbar-nav navbar-right "><a href="{{ route('login') }}" class="nav-link active">Login &nbsp;</a></li>
-            <li class="nav navbar-nav navbar-right"><a href="{{ route('register') }}" class="nav-link active">Register</a></li>
-          
-            
-        @else
-                @if( Auth::user()->admin )
-                <a href="/admin/home" role="button" aria-expanded="false" class="text-light mr-2" >
-                    {{ Auth::user()->name }} 
-                </a>
+        <a href="/products" class="navbar-brand d-flex align-items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+                stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2"
+                viewBox="0 0 24 24" focusable="false">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                <circle cx="12" cy="13" r="4" />
+            </svg>
+            <strong>OneStop Shop</strong>
+        </a>
+        <ul class="d-flex flex-column flex-md-row align-items-center p-1 list-group">
+            <!-- Authentication Links -->
+            @if (Auth::guest())
+                <li class="nav navbar-nav navbar-right "><a href="{{ route('login') }}" class="nav-link active">Login
+                        &nbsp;</a></li>
+                <li class="nav navbar-nav navbar-right"><a href="{{ route('register') }}"
+                        class="nav-link active">Register</a></li>
+
+
+            @else
+                @if (Auth::user()->admin)
+                    <a href="/admin/home" role="button" aria-expanded="false" class="text-light mr-2">
+                        {{ Auth::user()->name }}
+                    </a>
                 @else
-                <a href="/" role="button" aria-expanded="false" class="text-light mr-2" >
-                    {{ Auth::user()->name }} 
-                </a>
+                    <a href="/" role="button" aria-expanded="false" class="text-light mr-2">
+                        {{ Auth::user()->name }}
+                    </a>
                 @endif
-               <a href="/orders"  role="button" aria-expanded="false" class="text-light mr-2" >My Details</a>
-                <a href="/cart " role="button" aria-expanded="false" class="text-light mr-2" >
-                    Cart 
+                <a href="/orders" role="button" aria-expanded="false" class="text-light mr-2">My Details</a>
+                <a href="/shipping/details" role="button" aria-expanded="false" class="text-light mr-2">Shipping
+                    details</a>
+
+                <a href="/cart " role="button" aria-expanded="false" class="text-light mr-2">
+                    Cart
                 </a>
-             
-                    <div >
-                        <a href="{{ route('logout') }}"
-                            onclick="event.preventDefault();
+
+                <div>
+                    <a href="{{ route('logout') }}" onclick="event.preventDefault();
                                      document.getElementById('logout-form').submit();" class="text-light ml-2">
-                            Logout
-                        </a>
+                        Logout
+                    </a>
 
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            {{ csrf_field() }}
-                        </form>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        {{ csrf_field() }}
+                    </form>
 
 
 
-                    </div>
-              
-          
-        @endif
-    </ul>
+                </div>
+
+
+            @endif
+        </ul>
     </div>
-  </div>
+</div>
 </header>
 
 

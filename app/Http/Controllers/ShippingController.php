@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Shipping;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Psy\Util\Json;
 
 class ShippingController extends Controller
 {
@@ -28,10 +31,31 @@ class ShippingController extends Controller
      */
     public function create()
     {
+        # code...
+
+        return view('shipping.shippingForm');
+    }
+
+
+
+
+
+    public function address()
+    {
         //
-        if ((auth()->user()->shipping()->get()->isNotEmpty()))
-            return redirect('/order/confirmation'); // change it to order summary
-        return view('shipping');
+        if ((auth()->user()->shipping()->get()->isEmpty())) {
+            return redirect('shippingForm');
+        }
+
+        $shipping = Shipping::singleLineAddress();
+
+        return view('shipping.shipping', ['shipping' => $shipping]);
+    }
+
+    public function getShipping($id)
+    {
+        # code...
+      return Shipping::getShipping($id);
     }
 
     /**
@@ -42,9 +66,28 @@ class ShippingController extends Controller
      */
     public function store(Request $request)
     {
-        Shipping::store($request);
+        try {
+            //code...
+            $this->validate($request, [
+                'name' => 'required|min:2',
+                'address' => 'required|min:5',
+                'phone' => 'required|numeric'
+            ]);
 
-        return redirect('/order/confirmation');
+            $route = '/order/confirmation/';
+
+            if ($request->isNew == "true") {
+                $shipping = Shipping::store($request);
+                $route = '/order/confirmation/' . $shipping[0]->id;
+            } else {
+                $id = $request->shipping_id;
+                $route = '/order/confirmation/' . $id;
+            }
+        } catch (Exception $e) {
+
+            return view('layouts.errors', ['errors' => $e->getMessage()]);
+        }
+        return redirect($route);
     }
 
     /**
@@ -56,7 +99,15 @@ class ShippingController extends Controller
     public function show(Shipping $shipping)
     {
         //
-        return view('shipping');
+        try {
+            //code...
+            $shipping = Auth::user()->shipping;
+        } catch (Exception $e) {
+
+            return view('layouts.errors', ['errors' => $e->getMessage()]);
+        }
+
+        return view('shipping.details', compact('shipping'));
     }
 
     /**

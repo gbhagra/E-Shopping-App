@@ -27,14 +27,15 @@
             </thead>`
             <tbody>
                 @foreach ($orders as $order)
+                
                     <tr class="align-self-center">
 
-                        <td class='text-center'> {{ $order->id }} </td>
+                        <td class='text-center'> {{ $order->order_id }} </td>
                         <td class='text-center'>{{ $order->user_id }}</td>
 
                         <td class='text-center'>{{ $order->quantity }}</td>
                         <td class='text-center'>
-                            <select name="status" class="status pt-1 pb-1" id="{{ $order->id }}">
+                            <select name="status" class="status pt-1 pb-1" id="{{ $order->order_id }}">
 
                                 <option value="0"> Pending </option>
                                 <option value="1"> Confirmed </option>
@@ -44,19 +45,19 @@
                         </td>
                         <td class='text-center'>
                             @if ($order->status == 1) {{-- confirmed --}}
-                                <div class="alert alert-success" id="status{{ $order->id }}">
+                                <div class="" id="status{{ $order->order_id }}">
                                     Confirmed
                                 </div>
                             @elseif( $order->status == 2 ) {{-- dispatched --}}
-                                <div class="alert alert-warning" id="status{{ $order->id }}">
+                                <div class="" id="status{{ $order->order_id }}">
                                     Dispatched
                                 </div>
                             @elseif ($order->status == 3) {{-- delivered --}}
-                                <div class="alert alert-info" id="status{{ $order->id }}">
+                                <div class="" id="status{{ $order->order_id }}">
                                     Delivered
                                 </div>
                             @elseif ($order->status == 0){{-- pending --}}
-                                <div class="alert alert-danger" id="status{{ $order->id }}">
+                                <div class="" id="status{{ $order->order_id }}">
                                     pending
                                 </div>
                             @endif
@@ -80,19 +81,19 @@
 
                             if (response == 1) {
                                 document.getElementById(`status${orderId}`).className =
-                                    "alert alert-success";
+                                    // "alert alert-success";
                                 $(`#status${orderId}`).text('confirmed');
                             } else if (response == 2) {
                                 document.getElementById(`status${orderId}`).className =
-                                    "alert alert-warning";
+                                    // "alert alert-warning";
                                 $(`#status${orderId}`).text('Dispatched');
                             } else if (response == 3) {
                                 document.getElementById(`status${orderId}`).className =
-                                    "alert alert-info";
+                                    // "alert alert-info";
                                 $(`#status${orderId}`).text('Delivered');
                             } else {
                                 document.getElementById(`status${orderId}`).className =
-                                    "alert alert-danger";
+                                    // "alert alert-danger";
                                 $(`#status${orderId}`).text('Pending');
                             }
                         }

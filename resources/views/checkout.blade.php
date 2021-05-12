@@ -64,8 +64,13 @@
                     </ul>
                     <div class="justify-content-end d-flex">
                         <a type="button" class="btn btn-danger mr-1 btn-lg" href="/cart"> Cancel</a>
-                        <a type="button" href="/order/summary" class="btn btn-warning mr-1 btn-lg" href="/cart"> Place
-                            Order</a>{{-- to be directed to congrats page --}}
+                        <form action="/order/summary" method="post">
+                            {{ csrf_field() }}
+                            <input value="{{ $shipping->id }}" name="shipping_id" hidden></input>
+
+                            <button class="btn btn-warning mr-1 btn-lg"> Place
+                                Order</button>
+                        </form>
                     </div>
 
 

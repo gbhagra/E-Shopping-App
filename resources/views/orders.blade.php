@@ -20,7 +20,16 @@
 
         </div>
         <div class="col-md-8 mt-5">
+            @if(count($orders) == 0)
+            <div style="margin-top: 5%;margin-left:30%">
 
+                <img src="https://freesvg.org/img/shopping-bag1.png" />
+
+                <h4>Hey, it feels so light</h4>
+                <p>You have not placed any orders yet</p>
+                <a type="button" class="mycart" href="/products">Place Order</a>
+            </div>
+            @else
             <table class="table table-striped border border-info ">
 
                 <thead class="table-info">
@@ -35,6 +44,7 @@
                 </thead>
 
                 <tbody>
+                    
                     @foreach ($orders as $order)
                     
                         <tr>
@@ -46,6 +56,7 @@
 
                         </tr>
                     @endforeach
+                    @endif
                 </tbody>
 
             </table>

@@ -48,7 +48,7 @@ class User extends Authenticatable
     {
         # code...
 
-        return $this->hasOne(Shipping::class);
+        return $this->hasMany(Shipping::class);
     }
     public static function getUser($id)
     {

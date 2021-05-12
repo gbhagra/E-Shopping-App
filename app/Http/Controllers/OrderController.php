@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Orders;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
@@ -22,14 +23,16 @@ class OrderController extends Controller
         return view('admin.orders', compact('orders'));
     }
 
-    public function checkout()
+    public function checkout($id)
     {
-        return Orders::checkout();
+        $arr = Orders::checkout($id);
+
+        return view('checkout', $arr);
     }
 
-    public function store()
+    public function store(Request $request)
     {
-        $order_id = Orders::storeOrder();
+        $order_id = Orders::storeOrder($request->shipping_id);
         return view('summary', compact('order_id'));
     }
 
@@ -50,7 +53,7 @@ class OrderController extends Controller
         # code...
         $user = Auth::user();
         $orders = Orders::showOrders();
-        
+
         return view('orders', compact('orders'), compact('user'));
     }
 }
