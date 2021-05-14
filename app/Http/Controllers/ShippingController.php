@@ -44,7 +44,7 @@ class ShippingController extends Controller
     {
         //
         if ((auth()->user()->shipping()->get()->isEmpty())) {
-            return redirect('shippingForm');
+            return redirect(route('shippingForm'));
         }
 
         $shipping = Shipping::singleLineAddress();
@@ -65,7 +65,8 @@ class ShippingController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {   
+        // dd($request);
         try {
             //code...
             $this->validate($request, [
@@ -78,7 +79,7 @@ class ShippingController extends Controller
 
             if ($request->isNew == "true") {
                 $shipping = Shipping::store($request);
-                $route = '/order/confirmation/' . $shipping[0]->id;
+                $route = '/order/confirmation/' . $shipping->id;
             } else {
                 $id = $request->shipping_id;
                 $route = '/order/confirmation/' . $id;

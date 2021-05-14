@@ -55,7 +55,7 @@ class AdminController extends Controller
             $products = \App\Product::paginate(10);
         } catch (Exception $e) {
             //throw $th;
-            return view('layouts.errors',['errors'=>$e->getMessage()]);
+            return view('layouts.errors', ['errors' => $e->getMessage()]);
         }
 
         return view('admin.products', compact('products'));
@@ -64,7 +64,13 @@ class AdminController extends Controller
     public function showUsers()
     {
         # code...
-        $users = User::all();
+        try {
+            //code...
+            $users = User::all();
+        } catch (Exception $e) {
+
+            return view('layouts.errors', ['errors' => $e->getMessage()]);
+        }
         return view('admin.users', compact('users'));
     }
     /**
@@ -80,9 +86,8 @@ class AdminController extends Controller
             //code...
             $product = product::getProduct($id);
         } catch (Exception $e) {
-            //throw $th;
-            return view('layouts.errors',['errors'=>$e->getMessage()]);
-            
+      
+            return view('layouts.errors', ['errors' => $e->getMessage()]);
         }
 
         return view('admin.update', compact('product'));
@@ -110,8 +115,13 @@ class AdminController extends Controller
      */
     public function destroy(Request $request)
     {
-        //
-        product::destroy($request->id);
+        
+        try {
+            product::destroy($request->id);
+        } catch (Exception $e) {
+
+            return view('layouts.errors', ['errors' => $e->getMessage()]);
+        }
         return redirect()->back();
     }
 }

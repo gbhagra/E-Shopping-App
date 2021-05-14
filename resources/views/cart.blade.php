@@ -4,7 +4,7 @@
 
     <div class="container w-100">
 
-        <div class="row">
+        <div class="row" id="row">
 
 
             @if (count($cartItems) == 0)
@@ -17,9 +17,9 @@
                     <a type="button" class="mycart" href="/products">ADD ITEMS</a>
                 </div>
             @else
-            {{-- {{dd($cartItems)}} --}}
+
                 <div class="col-md-8">
-                    <div class="card mt-3">
+                    <div class="card mt-3" id="parent">
                         <h3>My cart</h3>
 
                         @foreach ($cartItems as $cartItem)
@@ -48,9 +48,6 @@
                                     <a type="button" class="btn btn-danger mr-3 Delete" style="height:2.5rem; color:white "
                                         href="/cart/delete/{{ $cartItem->product->id }}"
                                         id="{{ $cartItem->product->id }}">Delete</a>
-
-
-
                                 </div>
                             </div>
                         @endforeach
@@ -87,13 +84,23 @@
                 'type': 'GET',
                 'success': function() {
                     $(`#element${productId}`).remove();
+                    if ($("#parent").children().length == 1) {
+                        $('#row').html(` <div style="margin-top: 5%;margin-left:30%">
+
+                    <img src="https://freesvg.org/img/shopping-bag1.png" />
+
+                    <h4>Hey, it feels so light</h4>
+                    <p>There is nothing in your cart let's add some items</p>
+                    <a type="button" class="mycart" href="/products">ADD ITEMS</a>
+                    </div>`);
+                    }
                     $.ajax({
                         url: `/cart/total/${productId}`,
                         type: 'GET',
                         success: function(response) {
                             console.log(response);
-                            $('#total').text('₹'+response.total);
-                            $('#price').text('₹'+response.price);
+                            $('#total').text('₹' + response.total);
+                            $('#price').text('₹' + response.price);
                         }
                     })
                 }

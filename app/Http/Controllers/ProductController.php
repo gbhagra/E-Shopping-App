@@ -156,6 +156,7 @@ class ProductController extends Controller
 
             ]);
 
+            
             $product = product::getProduct($id);
             $path = $product->image;
             // add check for extension of file

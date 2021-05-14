@@ -29,8 +29,9 @@ class Orders extends Model
 
             $price = Cart::price()[1];
             $total = Cart::price()[2];
+         
             $shipping = Auth::user()->shipping->find($id);
-        //    dd($id);
+        //    (Auth::user()->shipping);dd
             // $shipping = 
             
         } catch (\Exception $e) {

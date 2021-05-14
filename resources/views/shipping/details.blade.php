@@ -2,6 +2,15 @@
 
 @section('content')
     <div class="album py-5 bg-light justify-content-center ">
+        @if (count($shipping) == 0)
+            <div class="card col-md-8" style="height: 100%;color:pink" >
+                <h1> There is nothing to show</h1> 
+                <div>
+                    <a class="btn btn-info" type="button" href="/products"> Go back</a>
+                </div>
+            </div>
+            
+      @else
         <div class="col-md-12">
             <table class="table table-striped">
                 <thead class="table-info">
@@ -40,5 +49,5 @@
 
         </div>
     </div>
-
+    @endif
 @endsection

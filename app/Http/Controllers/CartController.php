@@ -29,7 +29,7 @@ class CartController extends Controller
         //CART->PRODUCT = PRODUCT WHERE ID = CART->PRODUCTID
         try {
             //code...
-            $cartItems = Auth::user()->Cart()->get();
+            $cartItems = Cart::getCart();
             foreach ($cartItems as $cartItem)
                 $cartItem->product = product::getProduct($cartItem->product_id);
 

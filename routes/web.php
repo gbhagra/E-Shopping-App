@@ -17,21 +17,24 @@ Route::get('/', 'ProductController@index');
 Auth::routes();
 
 Route::get('/products', 'ProductController@index')->name('home');
+Route::middleware(['auth'])->group(function () {
+
 Route::get('/cart', 'CartController@index');
 Route::get('/shipping', 'ShippingController@address');
 Route::post('/shipping', 'ShippingController@store');
+Route::get('/shipping/details', 'ShippingController@show');
+Route::get('/shipping/new', 'ShippingController@create')->name('shippingForm');
 Route::post('/order/summary', 'OrderController@store');
 Route::get('/orders', 'OrderController@show');
-Route::get('/shipping/new','ShippingController@create')->name('shippingForm');
-Route::get('/shipping/details','ShippingController@show');
 Route::get('/cart/{id}', 'CartController@store');
 Route::get('/cart/delete/{id}', 'CartController@destroy');
 Route::post('/cart/update/{id}', 'CartController@update');
 Route::get('/cart/total/{id}', 'CartController@getTotal');
 Route::get('/admin/orders/status/{id}/{status}', 'OrderController@update');
 Route::get('/order/confirmation/{id}', 'OrderController@checkout');
-Route::get('/products/{id}', 'ProductController@show');
-Route::get('/shipping/{id}','ShippingController@getShipping');
+Route::get('/shipping/{id}', 'ShippingController@getShipping');
+});
+Route::get('/products/{id}', 'ProductController@show'); 
 
 
 Route::middleware(['auth', 'admin'])->group(function () {
@@ -46,5 +49,3 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/users/{id}', 'UserController@show');
     Route::get('/admin/orders', 'OrderController@index');
 });
-
-// Route::delete('users/{id}', CartController);

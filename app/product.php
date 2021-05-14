@@ -31,14 +31,26 @@ class product extends Model
     public static function inCart($id)
     {
         # code...
-        $inCart = Auth::User()->cart()->where('product_id', $id)->get()->isNotEmpty();
+        try {
+            //code...
+            $inCart = Auth::User()->cart()->where('product_id', $id)->get()->isNotEmpty();
+        } catch (Exception $e) {
+            //throw $th;
+            return view('layouts.errors', ['errors' => $e->getMessage()]);
+        }
         return $inCart;
     }
 
     public static function Productupdate(Request $request, $product, $path)
     {
         # code...
-        $product->update(['name' => $request->name, 'description' => $request->description, 'price' => $request->price, 'qty' => $request->quantity, 'image' => $path]);
+        try {
+            //code...
+            $product->update(['name' => $request->name, 'description' => $request->description, 'price' => $request->price, 'qty' => $request->quantity, 'image' => $path]);
+        } catch (Exception $e) {
+            //throw $th;
+            return view('layouts.errors', ['errors' => $e->getMessage()]);
+        }
     }
     public static function getProduct($id)
     {

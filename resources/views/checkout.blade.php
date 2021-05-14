@@ -8,6 +8,7 @@
             <div class="row">
                 <div class="card col-md-12">
                     <h3>Delivering To:</h3>
+
                     <p><strong>Name:</strong>{{ $shipping->name }}</p>
                     <p><strong>Phone No:</strong>{{ $shipping->phone }}</p>
                     <p><strong>Address:</strong>{{ $shipping->Address }}</p>

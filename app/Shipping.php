@@ -19,7 +19,7 @@ class Shipping extends Model
             //code...
 
 
-            Shipping::create([
+            $shipping = Shipping::create([
                 'user_id' => auth()->user()->id,
                 'name' => $request->name,
                 'address' => $request->address,
@@ -28,7 +28,7 @@ class Shipping extends Model
         } catch (Exception $e) {
             return view('layouts.errors', ['errors' => $e->getMessage()]);
         }
-        return Auth::user()->shipping()->latest()->first()->get();
+        return $shipping;
     }
 
     public static function singleLineAddress()

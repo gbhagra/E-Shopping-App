@@ -62,7 +62,6 @@ class Cart extends Model
                 $products[] = product::find($cart->product_id);
             }
 
-            // $price = 0;
             // foreach ($products as $product) $price += $product->price *($carts->where('product_id',$product->id)->get()->quantity);
             if ($price == 0) $total = 0; // if cart is empty delivery charges should be 0
             else $total = $price - ($price * 0.1) + 50;
@@ -75,7 +74,12 @@ class Cart extends Model
 
     public static function getQty($prod_id)
     {
-        $prod = Auth::user()->Cart()->where('product_id', $prod_id)->get();
+        try {
+            //code...
+            $prod = Auth::user()->Cart()->where('product_id', $prod_id)->get();
+        } catch (Exception $e) {
+            return view('layouts.errors', ['errors' => $e->getMessage()]);
+        }
         return $prod[0]->quantity;
     }
 
@@ -108,7 +112,6 @@ class Cart extends Model
         } catch (Exception $e) {
             //throw $th;
             return view('layouts.errors', ["errors" => $e->getMessage()]);
-            
         }
     }
 }

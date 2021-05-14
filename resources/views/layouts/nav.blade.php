@@ -32,7 +32,7 @@
                 <a href="/shipping/details" role="button" aria-expanded="false" class="text-light mr-2">Shipping
                     details</a>
 
-                <a href="/cart " role="button" aria-expanded="false" class="text-light mr-2">
+                <a href="/cart "  role="button" aria-expanded="false" class="text-light mr-2">
                     Cart
                 </a>
 
